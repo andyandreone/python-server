@@ -1,4 +1,4 @@
-# conectar a la base de datos
+
 import pymysql
 from flask import Flask
 from flask import jsonify
@@ -7,125 +7,232 @@ import json
 
 
 
-#--------------------------------------------
-
-
-import psycopg2
-from psycopg2 import sql
-# def obtener_conexion():
-conn = psycopg2.connect(host="janus-cluster.ci9p5pgbpkpv.us-west-2.redshift.amazonaws.com",
-                        port=5439,
-                        user="janusdb_produccion",
-                        password="Prod1234",
-                        database="lfdb_prod")
 
 
 
-
-
-
-
-#---------------------------------------------
-# def obtener_conexion():
-#     return pymysql.connect(host='127.0.0.1',
-#                                 user='root',
-#                                 password='1505',
-#                                 db='domotica')
-
-
-
-
-#funciones
-def getDatos():
-    print('pepe2')
-    # conn = obtener_conexion()
-    select_query = sql.SQL("SELECT max(id) FROM teting_table;")
-    cursor = conn.cursor()
-    cursor.execute(select_query)
-    rows = cursor.fetchall()
-    tmp_id = float(rows[0][0])+1
-    select_query = sql.SQL(f"INSERT INTO teting_table values ({tmp_id}, 1);commit")
-   
-    cursor = conn.cursor()
-    # time.sleep(0.1)
-    cursor.execute(select_query)
-    return 'pepe'
+# conectarse a la base de datos:
+def obtener_conexion():
+    return pymysql.connect(host='127.0.0.1',
+                                user='root',
+                                password='1505',
+                                db='domotica')
     
-
-
-
-# def getDatos():
-#     conexion = obtener_conexion()
-#     with conexion.cursor() as cursor:
-#         cursor.execute('SELECT * FROM lights')
-#         row_headers=[x[0] for x in cursor.description] #this will extract row headers
-#         rv = cursor.fetchall()
-#         json_data=[]
-#         for result in rv:
-#             json_data.append(dict(zip(row_headers,result)))
-#         return jsonify(json_data)
-
-
-# def getDatos():
-#     conexion = obtener_conexion()
-#     with conexion.cursor() as cursor:
-#         cursor.execute('SELECT * FROM lights')
-#         rows = cursor.fetchall()
-#         result = []
-#         for row in rows:
-#             d={}
-#         for i, col in enumerate(cursor.description):
-#             d[col[0]]= row[i]
-#             result.append(d)
-#     json_result = json.dumps(result)
-#     print(json_result)            
-#     conexion.close()
-#     return json_result
-
-
-
-
-# # Execute the SQL query
-# query = “SELECT * FROM table_name”
-# cursor.execute(query)
-
-# # Fetch all rows and convert to a list of dictionaries
-# rows = cursor.fetchall()
-# result = []
-# for row in rows:
-# d = {}
-# for i, col in enumerate(cursor.description):
-# d[col[0]] = row[i]
-# result.append(d)
-
-# # Convert the list of dictionaries to JSON and print it
-# json_result = json.dumps(result)
-# print(json_result)
-
-
-
-
-
-# server
-
-
 
 app = Flask(__name__)
 
-# @app.route("")
-# def index():
-#     d = getDatos()
-#     print(d)
-#     return jsonify(d)
 
-@app.route("/lights/datos")
+@app.route("/")
 def index():
-    d = getDatos()
+    return "Welcome to Sunday Intelligence"
+
+#OBTENER TODOS LOS DISPOSITIVOS
+def getDevices():
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute('SELECT * FROM lights')
+        row_headers=[x[0] for x in cursor.description] #this will extract row headers
+        rv = cursor.fetchall()
+        json_data=[]
+        for result in rv:
+            json_data.append(dict(zip(row_headers,result)))
+        return jsonify(json_data)
+
+@app.route("/devices")
+def devices():
+    d = getDevices()
+    return d
+
+#OBTENER LUCES
+
+def getDevicesLights():
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute('SELECT * FROM lights WHERE category = "light"')
+        row_headers=[x[0] for x in cursor.description] #this will extract row headers
+        rv = cursor.fetchall()
+        json_data=[]
+        for result in rv:
+            json_data.append(dict(zip(row_headers,result)))
+        return jsonify(json_data)
+
+   
+@app.route("/devices/lights")
+def getLights():
+    d = getDevicesLights()
     return d
    
 
 
 
-    
+#-------------------------------
 
+def getDevicesAir():
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute('SELECT * FROM lights WHERE category = "air"')
+        row_headers=[x[0] for x in cursor.description] #this will extract row headers
+        rv = cursor.fetchall()
+        json_data=[]
+        for result in rv:
+            json_data.append(dict(zip(row_headers,result)))
+        return jsonify(json_data)
+
+   
+@app.route("/devices/air")
+def getAir():
+    d = getDevicesAir()
+    return d
+   
+
+
+def getDevicesPlug():
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute('SELECT * FROM lights WHERE category = "plug"')
+        row_headers=[x[0] for x in cursor.description] #this will extract row headers
+        rv = cursor.fetchall()
+        json_data=[]
+        for result in rv:
+            json_data.append(dict(zip(row_headers,result)))
+        return jsonify(json_data)
+
+   
+@app.route("/devices/plug")
+def getPlug():
+    d = getDevicesPlug()
+    return d
+   
+
+
+
+# router.get('/devices/lights', getDatosLights);
+
+# router.get('/lights/count', getCountLights);
+
+# router.get('/lights/data/:id',getDataLight)
+
+# router.post('/light', saveDeviceLight);
+
+# router.delete('/lights/data/:id', deleteDataLight)
+
+# router.put('/lights/data/:id', updateDataLight)
+
+# //CURTAINS
+
+# router.get('/curtains/datos', getDatosCurtains);
+
+# //AIR
+# router.get('/devices/air', getDatosAir);
+
+
+# //TOMACORRIENTE
+# router.get('/devices/plug', getDatosPlug);
+
+# //TOMACORRIENTE
+# router.get('/devices/rooms/:room', getDatosRooms);
+
+# /----------- CORTINAS ---------------------------------
+
+# export const getDatosCurtains = async (req,res) => {
+#    const connection = await connect()
+#    const [rows] = await connection.query("SELECT * FROM device WHERE category = 'curtain'")
+#    res.json(rows);
+# }
+
+
+
+# //----------- LUCES ---------------------------------
+
+# export const getDatosLights = async (req,res) => {
+
+#     const connection = await connect()
     
+#     const [rows] =  await connection.query("SELECT * FROM lights WHERE category = 'light'")
+    
+#     res.json(rows);
+#  }
+ 
+# //----------- air ---------------------------------
+
+# export const getDatosAir = async (req,res) => {
+
+#     const connection = await connect()
+    
+#     const [rows] =  await connection.query("SELECT * FROM lights WHERE category = 'air'")
+    
+#     res.json(rows);
+#  }
+
+
+#  //----------- air ---------------------------------
+
+# export const getDatosPlug = async (req,res) => {
+
+#     const connection = await connect()
+    
+#     const [rows] =  await connection.query("SELECT * FROM lights WHERE category = 'plug'")
+    
+#     res.json(rows);
+# }
+
+
+#  //----------- rooms ---------------------------------
+
+#  export const getDatosRooms= async (req,res) => {
+#     const connection = await connect()
+#     const [rows] = await connection.query('SELECT * FROM lights WHERE room = ?' , [req.params.room,])
+    
+#     if(rows.length>0){
+#         res.json(rows)
+#     }
+#     else{
+#         res.json('no se encontraron resultados')
+#     }
+
+# }
+# //-----GENERALES----------
+ 
+#  export const getDataLight = async (req,res) => {
+#      const connection = await connect()
+#      const [rows] = await connection.query('SELECT * FROM lights WHERE id = ?' , [req.params.id,])
+     
+#      if(rows.length>0){
+#          res.json(rows[0])
+#      }
+#      else{
+#          res.json('no se encontraron resultados')
+#      }
+#  }
+ 
+#  export const getCountLights = async (req,res) => {
+#      const connection = await connect();
+#      const [rows] = await connection.query('SELECT COUNT (*) FROM device')
+     
+#      res.json(rows[0]["COUNT (*)"]);
+#  }
+ 
+#  export const saveDeviceLight = async (req,res) => {
+#      const connection = await connect()
+#      const [results] = await connection.query('INSERT INTO device (name, nameIcon) VALUES (?,?)', [req.body.name, req.body.nameIcon])
+     
+#      res.json({
+#             id: results.insertId,
+#          ...req.body,
+#      });
+#  }
+ 
+#  export const deleteDataLight = async (req,res) => {
+#      const connection = await connect()
+#      await connection.query('DELETE FROM device WHERE id=?',[req.params.id])
+#      res.sendStatus(204)
+#  }
+ 
+#  export const updateDataLight = async (req,res) => {
+#      const connection = await connect()
+#      await connection.query('UPDATE lights SET ? WHERE id = ?', [
+#              req.body,
+#              req.params.id
+#          ])
+         
+#      res.sendStatus(204)
+#  }
