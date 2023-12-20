@@ -22,6 +22,7 @@ def obtener_conexion():
 
 app = Flask(__name__)
 CORS(app)
+app.run(debug=True)
 
 
 
@@ -112,19 +113,9 @@ def getPlug():
     return d
    
 
- #-------------------------------------  
 
-# @app.route('/post', methods=['POST'])
-# def post():
-#     data = request.json
-#     # print(data.get('name'))
-#     # print(data.get('age'))
-#     print(data)
-#     return data
-
-
-# ACTUALIZAR DATO
-@app.route('/lights/dato/<id>', methods=['PUT'])
+# ACTUALIZAR ESTADO DISPOSITIVO
+@app.route('/lights/data/<id>', methods=['PUT'])
 def pepito(id):
     
     data = request.json
@@ -135,7 +126,7 @@ def pepito(id):
     print(idDevice)
     conexion = obtener_conexion()
     with conexion.cursor() as cursor:
-        cursor.execute("UPDATE lights SET estado = 0 WHERE id = 1")
-        cursor.fetchall()
+        cursor.execute("UPDATE lights SET estado = %s WHERE id = %s", (estado,idDevice))
+        conexion.commit()
     return data
 

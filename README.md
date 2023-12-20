@@ -26,16 +26,20 @@ COMANDOS:
 
 obtener todos los dispositivos:
 
- `localhost:5000/devices`
+ GET `localhost:5000/devices`
 
 obtener todos las luces:
 
- `localhost:5000/devices/lights`
+ GET `localhost:5000/devices/lights`
 
 obtener todos los aires acondicionado:
 
- `localhost:5000/devices/air`
+ GET `localhost:5000/devices/air`
 
  obtener todos los tomacorrientes:
 
- `localhost:5000/devices/plug`
+ GET `localhost:5000/devices/plug`
+
+ actualizar estado dispositivo:
+
+ PUT `localhost:5000/devices/data/id`
