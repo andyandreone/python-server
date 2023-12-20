@@ -1,0 +1,54 @@
+GET http://localhost:5000/devices/lights
+
+###
+
+DELETE http://localhost:3000/data/1
+
+
+###
+
+
+PUT http://localhost:3000/data/1
+Content-Type: application/json
+
+{
+    "id": "1",
+    "name": "indoor1",
+    "humedad": "70",
+    "temperatura": "27",
+    "cooler": "1",
+    "extractor": "0",
+    "iluminacion": "0",
+    "riego": "1"
+ }
+
+
+###
+
+GET http://localhost:3000/datos/count
+
+###
+POST http://localhost:5000/post
+Content-Type: application/json
+
+{
+    "id": "3",
+    "name": "indoor3",
+    "humedad": "70",
+    "temperatura": "27",
+    "cooler": "1",
+    "extractor": "0",
+    "iluminacion": "0",
+    "riego": "1"
+ }
+
+###
+
+PUT http://localhost:5000/lights/dato/1
+Content-Type: application/json
+
+{
+    "estado": 0
+ }
+
+###
