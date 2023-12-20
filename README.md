@@ -1,13 +1,23 @@
 
 COMANDOS:
  
+ Posicionarte en la carpeta principal:
+
  `cd server-python`
+
+ Crear entorno virtual:
 
  `python3 -m venv .venv`
 
+ Activar entorno virtual:
+
  `. .venv/bin/activate`
 
+ Instalar Flask:
+
  `pip install Flask`
+
+ Ejecutar server:
 
  `flask --app server run`
 
