@@ -1,5 +1,5 @@
 
-COMANDOS:
+**COMANDOS:**
  
  Posicionarte en la carpeta principal:
 
@@ -22,7 +22,7 @@ COMANDOS:
  `flask --app server run`
 
 
- ROUTES:
+ **ROUTES:**
 
 obtener todos los dispositivos:
 
