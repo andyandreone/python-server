@@ -39,7 +39,11 @@ obtener todos los aires acondicionado:
  obtener todos los tomacorrientes:
 
  GET `localhost:5000/devices/plug`
+    
+obtener dispositivos segun lugar:
+
+ GET `localhost:5000/rooms/<room>`
 
  actualizar estado dispositivo:
 
- PUT `localhost:5000/devices/data/id`
+ PUT `localhost:5000/devices/data/<id>`

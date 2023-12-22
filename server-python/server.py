@@ -129,4 +129,24 @@ def pepito(id):
         cursor.execute("UPDATE lights SET estado = %s WHERE id = %s", (estado,idDevice))
         conexion.commit()
     return data
+   
+def getDevicesroom(r):
+    conexion = obtener_conexion()
+    with conexion.cursor() as cursor:
+        cursor.execute("SELECT * FROM lights WHERE room = %s",(r))
+        row_headers=[x[0] for x in cursor.description] #this will extract row headers
+        rv = cursor.fetchall()
+        json_data=[]
+        for result in rv:
+            json_data.append(dict(zip(row_headers,result)))
+        return jsonify(json_data)
 
+
+   
+@app.route('/rooms/<room>', methods=['GET'])
+def getRooms(room):
+    r = f'{room}'
+    
+    d = getDevicesroom(r)
+    return d
+  

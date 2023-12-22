@@ -23,9 +23,6 @@ Content-Type: application/json
  }
 
 
-###
-
-GET http://localhost:3000/datos/count
 
 ###
 POST http://localhost:5000/post
